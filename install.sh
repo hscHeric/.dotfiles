@@ -67,6 +67,9 @@ echo "Instalando e configurando asdf..."
 # A URL do asdf pode mudar. Verifique a versão mais recente se necessário.
 go install github.com/asdf-vm/asdf/cmd/asdf@v0.18.0
 
+#instalando tpm
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 # Adiciona plugins e instala versões com asdf
 asdf plugin add lua
 asdf plugin add lazygit
@@ -85,7 +88,7 @@ cd "$HOME/.dotfiles"
 stow zsh
 stow nvim
 stow alacritty
-# stow tmux
+stow tmux
 # stow git
 
 # --- Seção 5: Instalação de Fontes ---
