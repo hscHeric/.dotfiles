@@ -1,0 +1,9 @@
+[init]
+	defaultBranch = main
+[user]
+	name = Heric da Silva Cruz
+	email = hericsilvaho@gmail.com
+[core]
+	editor = nvim
+[pull]
+	rebase = true
