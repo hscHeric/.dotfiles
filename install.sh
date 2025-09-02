@@ -18,36 +18,38 @@ sudo dnf update -y
 echo "Instalando programas e ferramentas..."
 
 # Instala grupos de desenvolvimento
-sudo dnf group install -y \
-  c-development \
-  development-tools
+sudo dnf group install -y c-development development-tools
 
-# Lista de pacotes para instalar
-sudo dnf install -y \
-  stow \
-  neovim \
-  tmux \
-  btop \
-  zsh \
-  git \
-  fzf \
-  zoxide \
-  fish_indent \
-  bat \
-  fd-find \
-  alacritty \
-  ripgrep \
-  python3-neovim \
-  go \
-  clang \
-  bzip2-devel \
-  libffi-devel \
-  sqlite-devel \
-  tk-devel \
-  clang-format \
-  clang-tidy \
-  readline-devel \
+# Lista de pacotes para instalar em um array para fácil manutenção
+PROGRAMAS=(
+  stow
+  neovim
+  tmux
+  btop
+  zsh
+  git
+  fzf
+  zoxide
+  fish_indent
+  bat
+  fd-find
+  alacritty
+  ripgrep
+  python3-neovim
+  go
+  clang
+  bzip2-devel
+  libffi-devel
+  sqlite-devel
+  tk-devel
+  clang-format
+  clang-tidy
+  readline-devel
   util-linux-user
+)
+
+# Executa a instalação dos programas do array
+sudo dnf install -y "${PROGRAMAS[@]}"
 
 # --- Seção 2: Configuração do Shell (Zsh) ---
 echo "Configurando Zsh como seu shell padrão..."
@@ -89,7 +91,7 @@ stow zsh
 stow nvim
 stow alacritty
 stow tmux
-# stow git
+stow git
 
 # --- Seção 5: Instalação de Fontes ---
 echo "Instalando fontes do repositório..."
@@ -98,7 +100,7 @@ echo "Instalando fontes do repositório..."
 mkdir -p ~/.local/share/fonts
 
 # Copia a fonte AdwaitaMono do repositório para a pasta de fontes local
-cp -r "$HOME/.dotfiles"/fonts/* ~/.local/share/fonts/
+cp -r "$HOME/.dotfiles"/fonts/FiraCode ~/.local/share/fonts/
 
 # Atualiza o cache de fontes do sistema
 fc-cache -f -v
