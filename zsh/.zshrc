@@ -25,4 +25,7 @@ eval "$(zoxide init zsh)"
 
 #aliases
 alias cd="z"
+alias reload-zsh="source ~/.zshrc"
+alias edit-zsh="nvim ~/.zshrc"
+
 if [ "$TMUX" = "" ]; then tmux; fi

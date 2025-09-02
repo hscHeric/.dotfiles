@@ -1,48 +1,54 @@
-return { -- Autoformat
-  "stevearc/conform.nvim",
-  lazy = false,
-  keys = {
-    {
-      "<leader>f",
-      function()
-        require("conform").format({ async = true, lsp_fallback = true })
-      end,
-      mode = "",
-      desc = "[F]ormat buffer",
-    },
-  },
+return {
+  "neovim/nvim-lspconfig",
   opts = {
-    notify_on_error = true,
-    format_on_save = function(bufnr)
-      -- Disable "format_on_save lsp_fallback" for languages that don't
-      -- have a well standardized coding style. You can add additional
-      -- languages here or re-enable it for the disabled ones.
-      local disable_filetypes = { c = true, cpp = true }
-      return {
-        timeout_ms = 500,
-        lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-      }
-    end,
-    formatters_by_ft = {
-      lua = { "stylua" },
-      sh = { "shfmt" },
-      html = { "djlint" },
-      go = { "gofmt", "goimports" },
-      c = { "clang_format" },
-      -- Conform can also run multiple formatters sequentially
-      -- python = { "isort", "black" },
-      --
-      -- You can use a sub-list to tell conform to run *until* a formatter
-      -- is found.
-      -- javascript = { { "prettierd", "prettier" } },
+    servers = {
+      -- Ensure mason installs the server
+      clangd = {
+        keys = {
+          { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+        },
+        root_dir = function(fname)
+          return require("lspconfig.util").root_pattern(
+            ".clangd",
+            "Makefile",
+            "configure.ac",
+            "configure.in",
+            "config.h.in",
+            "meson.build",
+            "meson_options.txt",
+            "build.ninja"
+          )(fname) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(
+            fname
+          ) or require("lspconfig.util").find_git_ancestor(fname)
+        end,
+        capabilities = {
+          offsetEncoding = { "utf-16" }, -- Standard capability for precise positioning.
+        },
+        cmd = {
+          "clangd",
+          "--background-index",
+          "--clang-tidy", -- Enables clang-tidy. clangd will automatically look for a .clang-tidy file
+          -- in the project directory and apply its checks. This will show warnings from clang-tidy.
+          "--header-insertion=iwyu",
+          "--completion-style=detailed",
+          "--function-arg-placeholders",
+          "--fallback-style=llvm", -- Specifies the code formatting style to use if no .clang-format file is found
+          -- in the project. clangd automatically detects and uses a .clang-format file if present.
+          -- If not found, it will use LLVM style as requested.
+        },
+        init_options = {
+          usePlaceholders = true,
+          completeUnimported = true,
+          clangdFileStatus = true, -- Shows clangd status information, can be helpful for diagnostics.
+        },
+      },
     },
-    formatters = {
-      clang_format = {
-        prepend_args = { "--style=file", "--fallback-style=LLVM" },
-      },
-      shfmt = {
-        prepend_args = { "-i", "4" },
-      },
+    setup = {
+      clangd = function(_, opts)
+        local clangd_ext_opts = LazyVim.opts("clangd_extensions.nvim")
+        require("clangd_extensions").setup(vim.tbl_deep_extend("force", clangd_ext_opts or {}, { server = opts }))
+        return false -- Important: return false to allow nvim-lspconfig to also run its default setup for clangd.
+      end,
     },
   },
 }
