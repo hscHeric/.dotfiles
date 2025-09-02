@@ -64,6 +64,7 @@ git clone https://github.com/MichaelAquilina/zsh-you-should-use.git ${ZSH_CUSTOM
 # --- Seção 3: Instalação de Outras Ferramentas ---
 echo "Instalando Rust..."
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+cargo install eza
 
 echo "Instalando e configurando asdf..."
 # A URL do asdf pode mudar. Verifique a versão mais recente se necessário.
