@@ -2,7 +2,10 @@
 export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$(go env GOPATH)/bin:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 export KERL_BUILD_DOCS=yes
-DOTFILES_DIR="$HOME/.dotfiles"
+export DOTFILES_DIR="$HOME/.dotfiles"
+export EDITOR="nvim"
+export SUDO_EDITOR="$EDITOR"
+export BAT_THEME=ansi
 
 ZSH_THEME="bira"
 
